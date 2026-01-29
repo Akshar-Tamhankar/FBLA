@@ -112,6 +112,7 @@ This app supports FBLA’s mission by:
 Developed by:
 - Akshar Tamhankar
 - Rishi Koneru
+- Umang Srivastava
 
 ---
 
