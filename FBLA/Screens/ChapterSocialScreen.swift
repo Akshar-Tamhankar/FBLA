@@ -8,7 +8,7 @@ struct ChapterSocialScreen: View {
     private let youtubeURL = URL(string: "https://www.youtube.com/@YOURCHAPTER")!
 
     @State private var selected = 0
-    @State private var openURL: URL?
+    @State private var openURL: IdentifiableURL?
 
     var body: some View {
         ScrollView {
@@ -36,7 +36,7 @@ struct ChapterSocialScreen: View {
 
                         HStack(spacing: 12) {
                             Button {
-                                openURL = currentURL
+                                openURL = IdentifiableURL(url: currentURL)
                             } label: {
                                 Label("Open", systemImage: "safari")
                                     .frame(maxWidth: .infinity)
@@ -66,8 +66,8 @@ struct ChapterSocialScreen: View {
             }
             .padding(16)
         }
-        .sheet(item: $openURL) { url in
-            SafariView(url: url)
+        .sheet(item: $openURL) { item in
+            SafariView(url: item.url)
         }
     }
 
@@ -106,6 +106,11 @@ private struct HighlightRow: View {
     }
 }
 
+private struct IdentifiableURL: Identifiable {
+    let id = UUID()
+    let url: URL
+}
+
 // Safari sheet (in-app browser)
 private struct SafariView: UIViewControllerRepresentable {
     let url: URL
@@ -113,9 +118,4 @@ private struct SafariView: UIViewControllerRepresentable {
         SFSafariViewController(url: url)
     }
     func updateUIViewController(_ uiViewController: SFSafariViewController, context: Context) {}
-}
-
-// Needed for sheet(item:)
-extension URL: Identifiable {
-    public var id: String { absoluteString }
 }
